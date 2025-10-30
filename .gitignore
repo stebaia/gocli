@@ -33,3 +33,5 @@ fline
 # OS
 .DS_Store
 Thumbs.db
+
+.goreleaser.yaml
