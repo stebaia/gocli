@@ -1,8 +1,8 @@
 package templates
 
 import (
-	"fmt"
 	"fline-cli/internal/config"
+	"fmt"
 	"strings"
 )
 
@@ -17,6 +17,7 @@ func GeneratePubspec(cfg *config.ProjectConfig) string {
 		"logger: ^2.5.0",
 		"flutter_secure_storage: ^9.2.2",
 		"flutter_bloc: ^8.1.6",
+		"hydrated_bloc: ^9.1.5",
 		"equatable: ^2.0.7",
 		"font_awesome_flutter: ^10.8.0",
 		"pine: ^1.0.3",
@@ -27,18 +28,22 @@ func GeneratePubspec(cfg *config.ProjectConfig) string {
 		"auto_route: ^9.2.2",
 		"cached_network_image: ^3.2.3",
 		"json_annotation: ^4.9.0",
+		"sqlite3_flutter_libs: ^0.5.27",
 		"path_provider: ^2.1.5",
 		"path: ^1.9.0",
 		"shared_preferences: ^2.3.3",
 		"intl: ^0.20.2",
+		"google_fonts: ^6.3.2",
+		"flutter_local_notifications: ^18.0.1",
 	}
 
 	// Add Firebase dependencies
 	if cfg.UseFirebase {
 		dependencies = append(dependencies,
-			"firebase_core: ^3.8.1",
-			"firebase_auth: ^5.3.4",
-			"cloud_firestore: ^5.6.0",
+			"firebase_core: ^4.1.1",
+			"firebase_auth: ^6.1.0",
+			"cloud_firestore: ^6.0.2",
+			"google_sign_in: ^7.2.0",
 		)
 
 		if cfg.EnableNotifications {
@@ -59,6 +64,8 @@ func GeneratePubspec(cfg *config.ProjectConfig) string {
 		"bloc_test: ^9.1.0",
 		"retrofit_generator: ^9.1.5",
 		"auto_route_generator: ^9.0.0",
+		"http_mock_adapter: ^0.6.1",
+		"data_fixture_dart: ^2.2.0",
 		"mockito: ^5.3.2",
 		"json_serializable: ^6.7.1",
 	}
@@ -109,7 +116,7 @@ func GenerateApp(packageName string) string {
 	return fmt.Sprintf(`import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:%s/l10n/app_localizations.dart';
 import 'package:%s/di/dependency_injector.dart';
 import 'package:%s/routers/app_router.dart';
 import 'package:%s/theme/light_theme.dart';
@@ -146,7 +153,7 @@ class App extends StatelessWidget {
     );
   }
 }
-`, packageName, packageName, packageName)
+`, packageName, packageName, packageName, packageName)
 }
 
 // GenerateDependencyInjector generates dependency_injector.dart
@@ -282,4 +289,13 @@ func GenerateL10n(locale string, appName string) string {
     }
 }
 `, appName)
+}
+
+// GenerateL10nYaml generates l10n.yaml configuration file
+func GenerateL10nYaml() string {
+	return `synthetic-package: false
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+`
 }

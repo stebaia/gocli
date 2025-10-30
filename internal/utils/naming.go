@@ -45,6 +45,12 @@ func (n *NamingHelper) Original() string {
 	return n.original
 }
 
+// Reserved Dart/Flutter package names that cannot be used as project names
+var reservedNames = []string{
+	"test", "flutter", "dart", "build", "integration_test",
+	"flutter_test", "flutter_driver", "sky_engine",
+}
+
 // ValidateProjectName checks if a project name is valid for Flutter
 func ValidateProjectName(name string) error {
 	if name == "" {
@@ -62,6 +68,16 @@ func ValidateProjectName(name string) error {
 	// Check if starts with letter
 	if !isLetter(rune(name[0])) {
 		return &ValidationError{Field: "name", Message: "project name must start with a letter"}
+	}
+
+	// Check if name is reserved
+	for _, reserved := range reservedNames {
+		if strings.EqualFold(name, reserved) {
+			return &ValidationError{
+				Field:   "name",
+				Message: "'" + name + "' is a reserved name and cannot be used. Please choose a different name",
+			}
+		}
 	}
 
 	return nil

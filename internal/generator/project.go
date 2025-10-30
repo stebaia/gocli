@@ -95,10 +95,24 @@ func (g *ProjectGenerator) Generate() error {
 	}
 
 	g.logger.Step(8, 8, "Running code generation...")
-	if err := g.runCodeGeneration(); err != nil {
-		g.logger.Warning("Code generation had issues, but you can run it manually later")
-		g.logger.Info("Run: flutter pub run build_runner build --delete-conflicting-outputs")
+
+	// Generate localizations
+	if err := g.flutter.GenL10n(); err != nil {
+		return fmt.Errorf("localization generation failed: %w\nPlease run manually: flutter gen-l10n", err)
 	}
+
+	// Run build_runner for auto_route
+	if err := g.flutter.BuildRunnerBuild(); err != nil {
+		return fmt.Errorf("build runner failed: %w\nPlease run manually: flutter pub run build_runner build --delete-conflicting-outputs", err)
+	}
+
+	g.logger.Success("Project created successfully!")
+	g.logger.NewLine()
+	g.logger.Info("Next steps:")
+	g.logger.Info("1. cd " + g.config.ProjectName)
+	g.logger.Info("2. flutter run")
+	g.logger.NewLine()
+	g.logger.Info("To add models later, use: fline model")
 
 	return nil
 }
@@ -157,6 +171,7 @@ func (g *ProjectGenerator) generateCoreFiles() error {
 		"lib/routers/app_router.dart":         templates.GenerateAppRouter(g.config.ProjectName),
 		"lib/l10n/app_en.arb":                 templates.GenerateL10n("en", g.config.ProjectName),
 		"lib/l10n/app_it.arb":                 templates.GenerateL10n("it", g.config.ProjectName),
+		"l10n.yaml":                           templates.GenerateL10nYaml(),
 	}
 
 	for path, content := range files {
@@ -201,18 +216,4 @@ func (g *ProjectGenerator) generateModels() error {
 func (g *ProjectGenerator) generateScreens() error {
 	gen := NewScreenGenerator(g.config, g.writer)
 	return gen.Generate()
-}
-
-func (g *ProjectGenerator) runCodeGeneration() error {
-	// Generate localizations
-	if err := g.flutter.GenL10n(); err != nil {
-		return err
-	}
-
-	// Run build_runner
-	if err := g.flutter.BuildRunnerBuild(); err != nil {
-		return err
-	}
-
-	return nil
 }

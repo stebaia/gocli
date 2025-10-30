@@ -410,7 +410,6 @@ class %sBloc extends Bloc<%sEvent, %sState> {
 		g.naming.PascalCase(),
 		g.naming.PascalCase(),
 		g.naming.PascalCase(),
-		g.naming.PascalCase(),
 	)
 }
 
@@ -429,7 +428,7 @@ class Fetch%ss extends %sEvent {}
 class Fetch%s extends %sEvent {
   final String id;
 
-  const Fetch%s(this.id);
+  const Fetch%s({required this.id});
 
   @override
   List<Object> get props => [id];
@@ -438,7 +437,7 @@ class Fetch%s extends %sEvent {
 class Create%s extends %sEvent {
   final %s %s;
 
-  const Create%s(this.%s);
+  const Create%s({required this.%s});
 
   @override
   List<Object> get props => [%s];
@@ -448,7 +447,7 @@ class Update%s extends %sEvent {
   final String id;
   final %s %s;
 
-  const Update%s(this.id, this.%s);
+  const Update%s({required this.id, required this.%s});
 
   @override
   List<Object> get props => [id, %s];
@@ -457,7 +456,7 @@ class Update%s extends %sEvent {
 class Delete%s extends %sEvent {
   final String id;
 
-  const Delete%s(this.id);
+  const Delete%s({required this.id});
 
   @override
   List<Object> get props => [id];

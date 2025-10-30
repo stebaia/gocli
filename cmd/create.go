@@ -101,13 +101,6 @@ func runCreate(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	logger.Success("Project created successfully!")
-	logger.NewLine()
-	logger.Box("Next steps:", []string{
-		fmt.Sprintf("cd %s", cfg.ProjectName),
-		"flutter run",
-	})
-
 	return nil
 }
 
