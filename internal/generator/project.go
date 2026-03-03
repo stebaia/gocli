@@ -172,6 +172,7 @@ func (g *ProjectGenerator) generateCoreFiles() error {
 		"lib/l10n/app_en.arb":                 templates.GenerateL10n("en", g.config.ProjectName),
 		"lib/l10n/app_it.arb":                 templates.GenerateL10n("it", g.config.ProjectName),
 		"l10n.yaml":                           templates.GenerateL10nYaml(),
+		"CLAUDE.md":                           templates.GenerateClaudeMd(),
 	}
 
 	for path, content := range files {
