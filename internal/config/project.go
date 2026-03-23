@@ -25,6 +25,9 @@ type ProjectConfig struct {
 	GenerateProfileScreen  bool
 	GenerateSettingsScreen bool
 
+	// App context for CLAUDE.md (optional)
+	AppContext string
+
 	// Additional options
 	Force bool
 }

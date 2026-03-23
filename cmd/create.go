@@ -229,6 +229,37 @@ func runInteractiveWizard() (*config.ProjectConfig, error) {
 		return nil, err
 	}
 
+	// App context (optional)
+	var addContext bool
+	contextConfirmForm := huh.NewForm(
+		huh.NewGroup(
+			huh.NewConfirm().
+				Title("Add app context for Claude?").
+				Description("Provide a short description of your app's purpose and hierarchy to improve AI assistance via CLAUDE.md").
+				Value(&addContext),
+		).Title("🤖 AI Context"),
+	)
+
+	if err := contextConfirmForm.Run(); err != nil {
+		return nil, err
+	}
+
+	if addContext {
+		contextForm := huh.NewForm(
+			huh.NewGroup(
+				huh.NewText().
+					Title("App Context").
+					Description("Describe the app purpose, main features, and screen hierarchy (e.g. 'E-commerce app: Login → Home (product list) → Detail → Cart → Checkout')").
+					Value(&cfg.AppContext).
+					Lines(6),
+			).Title("🤖 AI Context"),
+		)
+
+		if err := contextForm.Run(); err != nil {
+			return nil, err
+		}
+	}
+
 	// Set screen flags
 	for _, screen := range selectedScreens {
 		switch screen {

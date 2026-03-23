@@ -81,7 +81,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.8.0 <4.0.0'
 
 dependencies:
   %s
@@ -292,8 +292,12 @@ func GenerateL10n(locale string, appName string) string {
 }
 
 // GenerateClaudeMd generates CLAUDE.md with project guidelines for LLMs
-func GenerateClaudeMd() string {
-	return `# Flutter Project Guidelines — fline architecture
+func GenerateClaudeMd(appContext string) string {
+	contextSection := ""
+	if appContext != "" {
+		contextSection = "## App Context\n\n" + appContext + "\n\n---\n\n"
+	}
+	return contextSection + `# Flutter Project Guidelines — fline architecture
 
 This file contains the rules that **must be strictly followed** in every Flutter project generated with ` + "`fline`" + `. Every instruction here takes absolute priority over any general Flutter convention.
 
